@@ -36,3 +36,59 @@
     transform: rotate(360deg);
   }
 }
+
+.unit-select-options {
+  width: 50%;
+  margin-left: 25%;
+  text-align: center;
+
+}
+
+.unit-select-option {
+  display: inline-block;
+
+}
+
+.error-msg {
+  color: red;
+  font-style: bold;
+}
+
+.display-map {
+  width: 75%;
+  height: 500px;
+  display: inline-block;
+}
+
+.vendor-view-container {
+  width: 25%;
+  height: 500px;
+  overflow: scroll;
+  display: inline-block;
+}
+
+/* TODO: decide on better variable name...?*/
+.map-and-vendors-container {
+  width: 80%;
+  margin-left: 10%;
+  border: 1px solid black;
+}
+
+.submit-button {
+  width: 90%;
+  min-height: 50px;
+  height: 2.5vw;
+  background-color: blue;
+  color: white;
+  border: none;
+  margin-left: 5%;
+  margin-right: 5%;
+  margin-top: 0.5vw;
+  margin-bottom: 0.5vw;
+  border-radius: 5px;
+}
+
+.submit-button:hover {
+  cursor: pointer;
+  background-color: #7799ff;
+}

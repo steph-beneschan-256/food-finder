@@ -1,0 +1,14 @@
+
+.vendor-table-cell {
+    padding: 1%;
+    border: 1px black solid;
+}
+
+.vendor-table-cell h1 {
+    font-size: medium;
+    font-style: bold;
+}
+
+.vendor-table-cell h2 {
+    font-size: small;
+}
