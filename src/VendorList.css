@@ -1,7 +1,12 @@
 
 .vendor-table-cell {
     padding: 1%;
-    border: 1px black solid;
+    border-bottom: 1px black solid;
+}
+
+.vendor-table-cell:hover {
+    cursor: pointer;
+    background-color: #0000ff22;
 }
 
 .vendor-table-cell h1 {

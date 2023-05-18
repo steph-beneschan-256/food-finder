@@ -92,16 +92,16 @@ export default function InputBar({processInput}) {
     return(
         <div>
             <div>
-                <h2>Find vendors near this location:</h2>
+                <h2>Find nearby food trucks & vendors</h2>
                 <p>
                     Select a location on the map below, use your location, or type in the coordinates manually:
                 </p>
-                <label>
+                <label className="input-latlng">
                     Latitude:
                     <input value={inputLat} onChange={(e) => setInputLat(e.target.value)} placeholder="Latitude"/>
 
                 </label>
-                <label>
+                <label className="input-latlng">
                     Longitude:
                     <input value={inputLong} onChange={(e) => setInputLong(e.target.value)} placeholder="Longitude"/>
 
@@ -110,9 +110,10 @@ export default function InputBar({processInput}) {
                     Use my location
                 </button>
             </div>
+            <div className="divider"/>
             <div>
                 <label>
-                    Units:
+                    Preferred Units of Distance:
                     <div className="unit-select-options">
                     {
                         selectableUnits.map((unit) => {
@@ -130,9 +131,11 @@ export default function InputBar({processInput}) {
                     </div>
                 </label>
             </div>
+            <div className="divider"/>
             <div>
-                <label>
-                    Maximum search radius:
+                
+                <label className="input-search-radius">
+                    Find vendors within this distance:
                     <input type="range" value={radius} min="1" max="10" onChange={(e)=>setRadius(e.target.value)}/>
                     {radius} {selectedUnits}
                 </label>

@@ -92,3 +92,35 @@
   cursor: pointer;
   background-color: #7799ff;
 }
+
+.input-latlng {
+  display: inline-block;
+  text-align: left;
+  margin: 1vw;
+}
+
+.input-latlng input {
+  display: block;
+  border-radius: 30px;
+  border: 1px solid #00000088;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.input-search-radius {
+  display: flex;
+  justify-content: center;
+}
+.input-search-radius input {
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+.divider {
+  height: 1px;
+  border-bottom: 1px solid #00000088;
+  margin-top: 4px;
+  margin-bottom: 5px;
+}

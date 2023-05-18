@@ -10,21 +10,8 @@ import InputBar from './InputBar';
 
 import mapManager from './MapManager';
 
-const testData = require("./test-data.json");
-
-// debug function to get different food item types
-function getFoodItemTypes() {
-  let foodItemTypes = new Set();
-  testData.forEach((location, i) => {
-    if(location.fooditems) {
-      location.fooditems.split(": ").forEach((item) => {
-        foodItemTypes.add(item);
-      });
-    }
-
-  });
-  console.log(foodItemTypes);
-}
+// For retrieval of SF data
+const appToken = "LXkSVzJ9evKQ88cg6zQGsQENw";
 
 /*
 Get distance between two geographic locations, each represented by latitude and longitude
@@ -45,51 +32,80 @@ function App() {
   // list of nearby vendors
   const [vendors, setVendors] = useState([]);
 
+  // list of food types offered by nearby vendors
+  const [foodTypes, setFoodTypes] = useState(new Set());
+
   const [selectedUnit, setSelectedUnit] = useState("km");
+
+  // Vendor Data fetched from the SF dataset
+  // It's probably safe to assume that the data will not be modified on a daily basis,
+  // so save the data for the rest of the user's session
+  const vendorData = useRef(null);
+
+  async function getVendors() {
+    if(vendorData.current === null) {
+      const newVendorData = await fetch("https://data.sfgov.org/resource/rqzj-sfat.json", {
+        method: "GET",
+        data: {
+          limit: 5000,
+          app_token: appToken
+        }
+      });
+      vendorData.current = await newVendorData.json();
+    }
+
+    return vendorData.current;
+  }
  
   function findVendors(lat, long, radius, unit="km") { // radius should be in km
     // Note: input validation is handled by the InputBar class
 
-      let nearbyVendors = [];
+      getVendors().then((vendorInfo) => {
+        let nearbyVendors = [];
+        let nearbyFoodTypes = new Set();
 
-      testData.forEach((location, i) => {
-          if(location.status === "APPROVED") {
+        vendorInfo.forEach((location, i) => {
+            if(location.status === "APPROVED") {
+  
+                const vendorLat = parseFloat(location.location.latitude);
+                const vendorLong = parseFloat(location.location.longitude);
+                
+                const c = distance(lat, long, vendorLat, vendorLong);
+                if(c <= radius) {
+                    const foodTypes = location.fooditems.split(/: ?/);
+                    foodTypes.forEach((foodType) => 
+                      {nearbyFoodTypes.add(foodType)}
+                    );
+                    nearbyVendors.push({
+                        id: location.objectid,
+                        name: location.applicant,
+                        location: location.location,
+                        distance: c,
+                        foodItems: foodTypes
+  
+                    })
+                };
+            }
+        })
+        nearbyVendors.sort((a,b) => a.distance - b.distance); // show closest vendors first
+        setVendors(nearbyVendors);
+        setFoodTypes(nearbyFoodTypes);
+  
+        // Update map display
+        mapManager.updateRangeCircle(lat, long, radius * 1000); // convert radius from km to m
+        mapManager.updateVendorMarkers(nearbyVendors);
+        mapManager.updateSearchLocMarker(lat, long);
+        mapManager.focusMapView(lat,long);
+  
+        setSelectedUnit(unit);
 
-              const vendorLat = parseFloat(location.location.latitude);
-              const vendorLong = parseFloat(location.location.longitude);
-              
-              const c = distance(lat, long, vendorLat, vendorLong);
-              if(c <= radius) {
-                  nearbyVendors.push({
-                      id: i,
-                      name: location.applicant,
-                      location: location.location,
-                      distance: c,
-                      foodItems: location.fooditems.split(/: ?/)
-
-                  })
-              };
-          }
       })
-      nearbyVendors.sort((a,b) => a.distance - b.distance); // show closest vendors first
-      console.log(nearbyVendors);
-      setVendors(nearbyVendors);
-
-      // Update map display
-      mapManager.updateRangeCircle(lat, long, radius * 1000); // convert radius from km to m
-      mapManager.updateVendorMarkers(nearbyVendors);
-      mapManager.updateSearchLocMarker(lat, long);
-      mapManager.focusMapView(lat,long);
-
-      setSelectedUnit(unit);
       
     }
 
   return (
     <div className="App">
-      <header>
-        
-      </header>
+      <header></header>
 
       <InputBar processInput={findVendors}/>
 
@@ -97,6 +113,15 @@ function App() {
         <VendorList vendors={vendors} unit={selectedUnit}/>
         <MapView updateLocation={()=>{console.log('a')}}/>
       </div>
+
+      {/* <div>
+        <h3>Types of food nearby:</h3>
+        <ul>
+          {(Array.from(foodTypes)).map((foodType) => {
+            return <li>{foodType}</li>
+          })}
+        </ul>
+      </div> */}
 
             
     </div>

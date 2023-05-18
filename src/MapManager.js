@@ -134,9 +134,9 @@ class MapManager {
     }
 
     // Functions for updating the map
-    focusMapView(lat, long) {
+    focusMapView(lat, long, zoomLevel=12) {
         if(this.mapRef !== null)
-            this.mapRef.setView([lat, long], 12);
+            this.mapRef.setView([lat, long], zoomLevel);
     }
 
     updateSelectedLocMarker(lat, long) {
