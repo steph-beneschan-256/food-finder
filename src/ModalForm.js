@@ -59,7 +59,7 @@ export default function ModalForm({onSubmit, onClose}) {
                     
                 </div>
                 <div>
-                    <input value={inputText} onChange={(e)=>{setInputText(e.target.value)}}></input>
+                    <input className="address-input" value={inputText} onChange={(e)=>{setInputText(e.target.value)}}></input>
                 </div>
                 <div>
                     <button onClick={searchAddress} disabled={loading} className="secondary-button">

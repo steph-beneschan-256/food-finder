@@ -10,7 +10,7 @@
 }
 .modal-inner {
     position: absolute;
-    width: 94%;
+    width: 92%;
     margin: 2%;
     padding: 2%;
     background-color: white;
@@ -18,6 +18,13 @@
     transition: background-color 0.5s;
 }
 
-.close-button {
-    
+.address-input {
+    width: 50%;
+    border-radius: 30px;
+    border: 1px solid #00000088;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+
 }
