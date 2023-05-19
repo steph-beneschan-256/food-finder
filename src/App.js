@@ -38,7 +38,8 @@ function App() {
   // Search options
   const [options, setOptions] = useState({
     radius: 5,
-    units: "km"
+    units: "km",
+    desiredFoodType: ""
   });
 
   const [searchDone, setSearchDone] = useState(false);
@@ -63,7 +64,7 @@ function App() {
     return vendorData.current;
   }
  
-  function findVendors(lat, long, radius=options.radius, unit=options.units) { // radius should be in km
+  function findVendors(lat, long, radius=options.radius, unit=options.units, desiredFoodType=options.desiredFoodType) { // radius should be in km
     // Note: input validation is handled by the InputBar class
 
       getVendors().then((vendorInfo) => {
@@ -75,10 +76,15 @@ function App() {
   
                 const vendorLat = parseFloat(location.location.latitude);
                 const vendorLong = parseFloat(location.location.longitude);
+                const foodTypes = (location.fooditems ? location.fooditems.split(/:|&|; ?/) : []).map((foodType) => {
+                  return foodType.trim();
+                });
+                console.log(foodTypes);
+                console.log(desiredFoodType);
                 
                 const c = distance(lat, long, vendorLat, vendorLong);
-                if(c <= radius) {
-                    const foodTypes = location.fooditems.split(/:|& ?/);
+                if(((desiredFoodType === "") || (foodTypes.includes(desiredFoodType))) && (c <= radius)) {
+                    
                     foodTypes.forEach((foodType) => 
                       {nearbyFoodTypes.add(foodType)}
                     );

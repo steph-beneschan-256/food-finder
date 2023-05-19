@@ -206,3 +206,15 @@ header h1 {
   color: #ffa947;
 }
 
+.text-input {
+  width: 98%;
+  border-radius: 30px;
+  border: 1px solid #00000088;
+  padding-top: 0.25vw;
+  padding-bottom: 0.25vw;
+  padding-left: 0.5vw;
+  padding-right: 0.5vw;
+  margin: 1%;
+
+}
+

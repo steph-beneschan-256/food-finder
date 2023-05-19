@@ -10,6 +10,7 @@ export default function InputBar({onLocationSelected, onOptionsUpdated, defaultO
     const [errorMsg, setErrorMsg] = useState("");
     const [loadingDeviceLoc, setLoadingDeviceLoc] = useState(false);
     const [searchModalOpen, setSearchModalOpen] = useState(false);
+    const [desiredFoodType, setDesiredFoodType] = useState(defaultOptions.desiredFoodType);
 
     function requestUserLocation() {
         setLoadingDeviceLoc(true);
@@ -112,6 +113,23 @@ export default function InputBar({onLocationSelected, onOptionsUpdated, defaultO
                         
                     </label>
                 </div>
+
+                <br/>
+
+                <div>
+                    <label>
+                        <div>
+                            3. Only show vendors offering this type of food:
+                        </div>
+                        <input className="text-input" type="text" value={desiredFoodType}
+                        placeholder="(Leave blank to accept all food types)"
+                        onChange={(e) => {
+                            setDesiredFoodType(e.target.value);
+                            onOptionsUpdated("desiredFoodType", e.target.value);
+                        }}/>
+                    </label>
+                </div>
+
                 {/* <div className="divider"/> */}
             </div>
 
