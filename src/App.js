@@ -3,7 +3,6 @@ import './App.css';
 import VendorList from './VendorList';
 import L from "leaflet";
 import 'leaflet/dist/leaflet.css';
-import markerIcon from 'leaflet/dist/images/marker-icon.png';
 import MapView from './MapView';
 import { useRef, useState } from 'react';
 import InputBar from './InputBar';
@@ -41,8 +40,6 @@ function App() {
     radius: 5,
     units: "km"
   });
-
-  const [selectedUnit, setSelectedUnit] = useState("km");
 
   const [searchDone, setSearchDone] = useState(false);
 
@@ -105,8 +102,6 @@ function App() {
         mapManager.updateVendorMarkers(nearbyVendors);
         mapManager.updateSearchLocMarker(lat, long);
         mapManager.focusMapView(lat,long);
-  
-        setSelectedUnit(unit);
 
         setSearchDone(true);
 
