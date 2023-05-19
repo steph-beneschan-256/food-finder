@@ -95,8 +95,8 @@ class MapManager {
 
     createMap(containerRef) {
             const newMap = L.map(containerRef, {
-                minZoom: 9,
-                maxBounds: L.latLngBounds(L.latLng(37.4773,-122.6986), L.latLng(37.9799,-122.2174))
+                minZoom: 12,
+                maxBounds: L.latLngBounds(L.latLng(37.67,-122.69), L.latLng(37.89,-122.22))
             });
 
             newMap.setView([37.756141, -122.444834], 13); //roughly the center of San Francisco
@@ -132,7 +132,7 @@ class MapManager {
                 */
                 let setLocButtonDiv = document.createElement("div");
                 let setLocButton = document.createElement("button");
-                setLocButton.textContent = "Use this location";
+                setLocButton.textContent = "Search at this location";
                 setLocButton.onclick = () => {
                     mapManager.popUpButtonClicked(e.latlng.lat, e.latlng.lng);
                     popup.close();
@@ -221,6 +221,17 @@ class MapManager {
             newVendorMarkers.push(newMarker);
           });
           this.vendorMarkers = newVendorMarkers;
+    }
+
+    clearMarkers() {
+        if(this.selectedLocMarker !== null)
+            this.selectedLocMarker.remove();
+        if(this.searchLocMarker !== null)
+            this.searchLocMarker.remove();
+        if(this.vendorMarkers.length > 0)
+            this.vendorMarkers.forEach((marker) => {marker.remove();})
+        if(this.rangeCircle !== null)
+            this.rangeCircle.remove();
     }
 }
 

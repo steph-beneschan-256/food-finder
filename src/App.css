@@ -2,41 +2,6 @@
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
 .unit-select-options {
   width: 50%;
   margin-left: 25%;
@@ -54,25 +19,69 @@
   font-style: bold;
 }
 
+.map-and-vendors-container {
+  width: 96%;
+  margin: 2%;
+  border: 1px solid black;
+  display: flex;
+  align-items: top;
+}
+
+.side-pane {
+  width: 21%;
+  height: 80vh;
+  display: inline-block;
+  padding: 2%;
+}
+
 .display-map {
   width: 75%;
-  height: 500px;
+  height: 80vh;
+  display: inline-block;
+}
+
+
+
+@media only screen and (max-width:900px) {
+  .map-and-vendors-container {
+    display: inline-block;
+  }
+
+  .side-pane {
+    width: 100%;
+    height: 100%;
+    display: block;
+    position: inherit;
+  }
+
+  .display-map {
+    width: 100%;
+    display: block;
+    position: relative;
+  }
+
+
+  
+}
+
+.input-pane {
+  display: inline-block;
+  height: 100%;
+}
+
+.options {
+  /* bottom: 100%; */
+}
+
+.status-pane {
   display: inline-block;
 }
 
 .vendor-view-container {
-  width: 25%;
-  height: 500px;
+  height: 70vh;
   overflow: scroll;
-  display: inline-block;
 }
 
-/* TODO: decide on better variable name...?*/
-.map-and-vendors-container {
-  width: 80%;
-  margin-left: 10%;
-  border: 1px solid black;
-}
 
 .submit-button {
   width: 90%;
@@ -111,12 +120,7 @@
 }
 
 .input-search-radius {
-  display: flex;
   justify-content: center;
-}
-.input-search-radius input {
-  margin-left: 5px;
-  margin-right: 5px;
 }
 
 .divider {
@@ -132,7 +136,6 @@
 
 .secondary-button {
   background-color: #ffa947;
-  padding: 1vw;
   color: black;
   border: none;
   border-radius: 5px;

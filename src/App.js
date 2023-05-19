@@ -9,6 +9,7 @@ import { useRef, useState } from 'react';
 import InputBar from './InputBar';
 
 import mapManager from './MapManager';
+import StatusPane from './StatusPane';
 
 // For retrieval of SF data
 const appToken = "LXkSVzJ9evKQ88cg6zQGsQENw";
@@ -35,7 +36,15 @@ function App() {
   // list of food types offered by nearby vendors
   const [foodTypes, setFoodTypes] = useState(new Set());
 
+  // Search options
+  const [options, setOptions] = useState({
+    radius: 5,
+    units: "km"
+  });
+
   const [selectedUnit, setSelectedUnit] = useState("km");
+
+  const [searchDone, setSearchDone] = useState(false);
 
   // Vendor Data fetched from the SF dataset
   // It's probably safe to assume that the data will not be modified on a daily basis,
@@ -57,7 +66,7 @@ function App() {
     return vendorData.current;
   }
  
-  function findVendors(lat, long, radius, unit="km") { // radius should be in km
+  function findVendors(lat, long, radius=options.radius, unit=options.units) { // radius should be in km
     // Note: input validation is handled by the InputBar class
 
       getVendors().then((vendorInfo) => {
@@ -99,30 +108,59 @@ function App() {
   
         setSelectedUnit(unit);
 
+        setSearchDone(true);
+
       })
       
-    }
+  }
+
+  function resetSearch() {
+    mapManager.clearMarkers();
+    setSearchDone(false);
+  }
+
+  // Configure the map so that a search is performed when
+  // the user selects a location from the map
+  mapManager.setOnSelectLocation((lat, long) => {
+    findVendors(lat, long);
+  })
 
   return (
     <div className="App">
-      <header></header>
-
-      <InputBar processInput={findVendors}/>
+      <header>
+        <h1>
+          Food Truck Finder
+        </h1>
+      </header>
 
       <div className="map-and-vendors-container">
-        <VendorList vendors={vendors} unit={selectedUnit}/>
+        {/* <VendorList vendors={vendors} unit={selectedUnit}/> */}
+        <div className="side-pane">
+          {
+            searchDone ? (
+              <StatusPane
+                searchDone={searchDone}
+                vendorsFound={vendors}
+                onResetSearch={resetSearch}
+                unit={options.units}
+              />
+            )
+            : (
+              <InputBar
+              onLocationSelected={(lat, long) => {findVendors(lat, long)}}
+                onOptionsUpdated={(optionChanged, newValue) => {
+                  const newOptions = {...options};
+                  newOptions[optionChanged] = newValue;
+                  setOptions(newOptions);
+                }}
+              defaultOptions={options}
+              />
+            )
+          }
+        </div>
+        
         <MapView updateLocation={()=>{console.log('a')}}/>
       </div>
-
-      {/* <div>
-        <h3>Types of food nearby:</h3>
-        <ul>
-          {(Array.from(foodTypes)).map((foodType) => {
-            return <li>{foodType}</li>
-          })}
-        </ul>
-      </div> */}
-
             
     </div>
   );

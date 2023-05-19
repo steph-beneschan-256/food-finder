@@ -22,16 +22,15 @@ function inSanFrancisco(lat, long) {
 
 }
 
-export default function InputBar({processInput}) {
-    // Search radius
-    const [radius, setRadius] = useState(9); // km 
+export default function InputBar({onLocationSelected, onOptionsUpdated, defaultOptions}) {
 
     const [inputLat, setInputLat] = useState("37.719503");
     const [inputLong, setInputLong] = useState("-122.480777");
 
-    const [errorMsg, setErrorMsg] = useState("");
+    const [selectedUnits, setSelectedUnits] = useState(defaultOptions.units);
+    const [radius, setRadius] = useState(defaultOptions.radius);
 
-    const [selectedUnits, setSelectedUnits] = useState("km");
+    const [errorMsg, setErrorMsg] = useState("");
 
     const [loadingDeviceLoc, setLoadingDeviceLoc] = useState(false);
 
@@ -40,10 +39,10 @@ export default function InputBar({processInput}) {
     then clicks on the "use this location" button that consequently pops up,
     act as though the user input that location into this input component
     */
-    mapManager.setOnSelectLocation((lat, long) => {
-        setInputLat(lat);
-        setInputLong(long);
-    })
+    // mapManager.setOnSelectLocation((lat, long) => {
+    //     setInputLat(lat);
+    //     setInputLong(long);
+    // })
 
     // err: function which accepts an error message as a parameter
     function inputIsValid(err) {
@@ -69,12 +68,13 @@ export default function InputBar({processInput}) {
     function requestUserLocation() {
         setLoadingDeviceLoc(true);
         navigator.geolocation.getCurrentPosition((pos) => {
-            setInputLat(pos.coords.latitude);
-            setInputLong(pos.coords.longitude);
             setLoadingDeviceLoc(false);
+            const lat = pos.coords.latitude;
+            const long = pos.coords.longitude;
+            onLocationSelected(lat, long); // Tell the parent component to conduct the search
         },
         (err) => {
-            console.log(err);
+            setErrorMsg("Sorry, we couldn't get your location. Please choose a location on the map instead.");
             setLoadingDeviceLoc(false);
         });
     }
@@ -86,7 +86,7 @@ export default function InputBar({processInput}) {
             const long = parseFloat(inputLong);
             const searchRadius = parseInt(radius) * conversionFactors[selectedUnits]; //get specified radius in km
 
-            processInput(lat, long, searchRadius, selectedUnits);
+            onLocationSelected(lat, long, searchRadius, selectedUnits);
         }
         else {
                 console.log("invalid input");
@@ -95,68 +95,70 @@ export default function InputBar({processInput}) {
     }
 
     return(
-        <div>
-            <div>
-                <h2>Find nearby food trucks & vendors</h2>
-                <p>
-                    Select a location on the map below, use your location, or type in the coordinates manually:
-                </p>
-                <label className="input-latlng">
-                    Latitude:
-                    <input value={inputLat} onChange={(e) => setInputLat(e.target.value)} placeholder="Latitude"/>
+        <div className="input-pane">
 
-                </label>
-                <label className="input-latlng">
-                    Longitude:
-                    <input value={inputLong} onChange={(e) => setInputLong(e.target.value)} placeholder="Longitude"/>
-
-                </label>
+            <div className="options">
+                <h3>Options:</h3>
                 <div>
-                    <button onClick={requestUserLocation} disabled={loadingDeviceLoc} className="secondary-button">
-                        {loadingDeviceLoc ? "Getting your location..." : "Use my location"}
-                    </button>
+                    <label>
+                        Preferred Units of Distance:
+                        <div className="unit-select-options">
+                        {
+                            selectableUnits.map((unit) => {
+                                return(
+                                    <div key={unit} className="unit-select-option">
+                                        <input type="radio" name="unit-select" 
+                                        checked={selectedUnits === unit}
+                                        value={unit}
+                                        onChange={(e) => {
+                                            setSelectedUnits(e.target.value);
+                                            onOptionsUpdated("units", e.target.value);
+                                            }}/>
+                                        {unit}
+                                    </div>
+                                )
+                            })
+                        }
+                        </div>
+                    </label>
                 </div>
+                <div className="divider"/>
+
+                <div>
+                    <label className="input-search-radius">
+                        <div>
+                            Find vendors within this distance:
+                        </div>
+                        <div>
+                            <b>{radius}</b> {selectedUnits}
+                        </div>
+                        <input type="range" value={radius} min="1" max="10"
+                        onChange={(e)=>{
+                            setRadius(e.target.value);
+                            onOptionsUpdated("radius", e.target.value);
+                        }}/>
+                        
+                    </label>
+                </div>
+                <div className="divider"/>
             </div>
-            <div className="divider"/>
+            
             <div>
-                <label>
-                    Preferred Units of Distance:
-                    <div className="unit-select-options">
-                    {
-                        selectableUnits.map((unit) => {
-                            return(
-                                <div key={unit} className="unit-select-option">
-                                    <input type="radio" name="unit-select" 
-                                    checked={selectedUnits === unit}
-                                    value={unit}
-                                    onChange={(e) => setSelectedUnits(e.target.value)}/>
-                                    {unit}
-                                </div>
-                            )
-                        })
-                    }
-                    </div>
-                </label>
-            </div>
-            <div className="divider"/>
-            <div>
+                <p>
+                To search, please select a location on the map or use your device location:
+                </p>
                 
-                <label className="input-search-radius">
-                    Find vendors within this distance:
-                    <input type="range" value={radius} min="1" max="10" onChange={(e)=>setRadius(e.target.value)}/>
-                    {radius} {selectedUnits}
-                </label>
+                <button onClick={requestUserLocation} disabled={loadingDeviceLoc} className="secondary-button">
+                    {loadingDeviceLoc ? "Getting your location..." : "Use my location"}
+                </button>
+
+                {(errorMsg !== "") &&
+                    <div className="error-msg">
+                        &#x26A0; {errorMsg}
+                    </div>
+                }
             </div>
-            
-            <button onClick={()=>submitInput()} className="submit-button">
-                Find nearby vendors
-            </button>
-            
-            {(errorMsg !== "") &&
-                <div className="error-msg">
-                    &#x26A0; {errorMsg}
-                </div>
-            }
+
         </div>
     )
 
