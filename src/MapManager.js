@@ -32,6 +32,7 @@ class MapManager {
         this.searchLocMarker = null; // after search
         this.rangeCircle = null;
         this.vendorMarkers = [];
+        this.vendorPopups = new Map();
 
 
         /*
@@ -109,8 +110,6 @@ class MapManager {
 
             let popup = L.popup();
 
-
-
             function onMapClick(e) {
                 
                 mapManager.setSelectedLat(e.latlng.lat);
@@ -160,6 +159,10 @@ class MapManager {
             
     }
 
+    openVendorPopup(vendorID) {
+        this.vendorPopups[vendorID].openOn(this.mapRef);
+    }
+
     getMapRef() {
         return this.mapRef;
     }
@@ -207,6 +210,33 @@ class MapManager {
         this.rangeCircle = newCircle;
     }
 
+    /*
+    For a nearby vendor, create a popup message that will appear upon selecting the
+    vendor in the list of search results or clicking its location on the map
+    */
+    createVendorPopup(vendor) {
+        let newPopup = L.popup();
+        let popupDiv = document.createElement("div");
+            
+        let p = document.createElement("p");
+        p.textContent = `${vendor.facilitytype} by `;
+        let b = document.createElement("b");
+        b.textContent = vendor.name;
+        p.appendChild(b);
+        popupDiv.appendChild(p);
+
+        let p2 = document.createElement("p");
+        p2.textContent = `Location: ${vendor.locationdescription}`
+        popupDiv.appendChild(p2);
+
+        const vendorLatLng = L.latLng(vendor.location.latitude, vendor.location.longitude);
+
+        newPopup.setLatLng(vendorLatLng).setContent(popupDiv);
+        this.vendorPopups[vendor.id] = newPopup;
+
+        return newPopup;
+    }
+
     updateVendorMarkers(nearbyVendors) {
         if(this.vendorMarkers.length > 0) {
             this.vendorMarkers.forEach((marker) => {marker.remove();})
@@ -216,7 +246,9 @@ class MapManager {
             let newMarker = L.marker([vendor.location.latitude, vendor.location.longitude], {
               icon: foodMarker
             });
-            newMarker.bindPopup(vendor.name);
+
+            const newPopup = this.createVendorPopup(vendor);
+            newMarker.bindPopup(newPopup);
             newMarker.addTo(this.mapRef);
             newVendorMarkers.push(newMarker);
           });

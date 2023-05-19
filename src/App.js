@@ -78,7 +78,7 @@ function App() {
                 
                 const c = distance(lat, long, vendorLat, vendorLong);
                 if(c <= radius) {
-                    const foodTypes = location.fooditems.split(/: ?/);
+                    const foodTypes = location.fooditems.split(/:|& ?/);
                     foodTypes.forEach((foodType) => 
                       {nearbyFoodTypes.add(foodType)}
                     );
@@ -87,7 +87,9 @@ function App() {
                         name: location.applicant,
                         location: location.location,
                         distance: c,
-                        foodItems: foodTypes
+                        foodItems: foodTypes,
+                        facilitytype: location.facilitytype,
+                        locationdescription: (location.locationdescription ? location.locationdescription : `(${vendorLat}, ${vendorLong})`),
   
                     })
                 };

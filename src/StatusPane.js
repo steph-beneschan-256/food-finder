@@ -10,9 +10,12 @@ export default function StatusPane({vendorsFound, onResetSearch, unit}) {
             <div>
                 <VendorList vendors={vendorsFound} unit={unit}/>
                 <div className="divider"/>
-                <button onClick={onResetSearch} className="secondary-button">
-                    New Search
-                </button>
+                <div className="new-search-button-container">
+                    <button onClick={onResetSearch} className="secondary-button new-search-button">
+                        New Search
+                    </button>
+                </div>
+                
             </div>
         </div>
     )

@@ -8,7 +8,11 @@ function VendorRow({vendor, unit="km"}) {
     const displayDistance = mapManager.convertUnits(vendor.distance, "km", unit);
     return(
         <div key={vendor.id}
-        onClick={()=>mapManager.focusMapView(vendor.location.latitude, vendor.location.longitude, 14)}
+        onClick={()=>{
+            //
+            mapManager.openVendorPopup(vendor.id);
+            mapManager.focusMapView(parseFloat(vendor.location.latitude), parseFloat(vendor.location.longitude), 14);
+        }}
         className="vendor-table-cell">
             <h1>{vendor.name}</h1>
             <h2>{`${displayDistance.toFixed(2)} ${unit} away`}</h2>

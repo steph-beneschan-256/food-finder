@@ -140,7 +140,9 @@ export default function InputBar({onLocationSelected, onOptionsUpdated, defaultO
                         </div>
                     </label>
                 </div>
+                
                 {/* <div className="divider"/> */}
+                <br/>
 
                 <div>
                     <label className="input-search-radius">
