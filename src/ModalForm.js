@@ -73,8 +73,8 @@ export default function ModalForm({onSubmit, onClose}) {
                     </div>
                 }
 
-                <button onClick={onClose}>
-                    Close
+                <button onClick={onClose} className="tertiary-button">
+                    Cancel
                 </button>
             </div>
         </div>

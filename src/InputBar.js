@@ -2,71 +2,14 @@ import { useState } from "react";
 import mapManager from "./MapManager";
 import ModalForm from "./ModalForm";
 
-const validLong = /^0*-?((180(\.0*)?)|(1[0-7]\d|\d\d?)(\.\d*)?)$/;
-const validLat = /^0*-?((90(\.0*)?)|([0-8]?\d(\.\d*)?))$/;
-const validRad = /^\d{1,3}$/;
-
 const selectableUnits = ["km", "mi"];
-const conversionFactors = {
-    "km": 1,
-    "mi": 0.621504
-}
-
-// Check whether (lat, long) describes a location roughly within the SF area
-function inSanFrancisco(lat, long) {
-    return (
-        (37.6773 <= lat)
-        && (lat <= 37.9799)
-        && (-122.6986 <= long)
-        && (long <= -122.2174)
-    );
-
-}
 
 export default function InputBar({onLocationSelected, onOptionsUpdated, defaultOptions}) {
-
-    const [inputLat, setInputLat] = useState("37.719503");
-    const [inputLong, setInputLong] = useState("-122.480777");
-
     const [selectedUnits, setSelectedUnits] = useState(defaultOptions.units);
     const [radius, setRadius] = useState(defaultOptions.radius);
-
     const [errorMsg, setErrorMsg] = useState("");
-
     const [loadingDeviceLoc, setLoadingDeviceLoc] = useState(false);
-
     const [searchModalOpen, setSearchModalOpen] = useState(false);
-
-    /*
-    When the user clicks on the map at a certain location,
-    then clicks on the "use this location" button that consequently pops up,
-    act as though the user input that location into this input component
-    */
-    // mapManager.setOnSelectLocation((lat, long) => {
-    //     setInputLat(lat);
-    //     setInputLong(long);
-    // })
-
-    // err: function which accepts an error message as a parameter
-    function inputIsValid(err) {
-        if(!validLat.test(inputLat)) {
-            err("Please enter a valid latitude.");
-            return false;
-        }
-        if(!validLong.test(inputLong)) {
-            err("Please enter a valid longitude.");
-            return false;
-        }
-        if(!inSanFrancisco(parseFloat(inputLat), parseFloat(inputLong))) {
-            err("Please enter a location within the San Francisco area.");
-            return false;
-        }
-        if(!validRad.test(radius)) {
-            err("Please enter a valid radius of up to three digits.");
-            return false;
-        }
-        return true;
-    }
 
     function requestUserLocation() {
         setLoadingDeviceLoc(true);
@@ -92,21 +35,6 @@ export default function InputBar({onLocationSelected, onOptionsUpdated, defaultO
 
     function closeSearchModal() {
         setSearchModalOpen(false);
-    }
-
-    function submitInput() {
-        if(inputIsValid((errMsg) => {setErrorMsg(errMsg)})) {
-            setErrorMsg("");
-            const lat = parseFloat(inputLat);
-            const long = parseFloat(inputLong);
-            const searchRadius = parseInt(radius) * conversionFactors[selectedUnits]; //get specified radius in km
-
-            onLocationSelected(lat, long, searchRadius, selectedUnits);
-        }
-        else {
-                console.log("invalid input");
-        }
-
     }
 
     return(

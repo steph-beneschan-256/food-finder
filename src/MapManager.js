@@ -131,7 +131,7 @@ class MapManager {
                 // Create a div within the popup that shows the clicked location
                 let latlngDiv = document.createElement("div");
                 latlngDiv.textContent = `(${e.latlng.lat.toFixed(4)}, ${e.latlng.lng.toFixed(2)})`;
-                popupDiv.appendChild(latlngDiv);
+                //popupDiv.appendChild(latlngDiv);
 
                 /*
                 Create a div within the popup that shows a "use this location" button

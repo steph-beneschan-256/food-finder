@@ -176,6 +176,7 @@ header h1 {
   padding-bottom: 0.25vw;
   margin-top: 0.25vw;
   margin-bottom: 0.25vw;
+  transition: background-color 0.25s;
 }
 .secondary-button:hover {
   cursor: pointer;
@@ -185,5 +186,23 @@ header h1 {
   cursor: not-allowed;
   background-color: #bdbdbd;
   color: #808080
+}
+
+.tertiary-button {
+  background-color: transparent;
+  border: 2px solid black;
+  color: black;
+  width: 100%;
+  border-radius: 5px;
+  padding-top: 0.25vw;
+  padding-bottom: 0.25vw;
+  margin-top: 0.25vw;
+  margin-bottom: 0.25vw; 
+  transition: color 0.25s, border 0.25s ;
+}
+.tertiary-button:hover {
+  cursor: pointer;
+  border: 2px solid #ffa947;
+  color: #ffa947;
 }
 
