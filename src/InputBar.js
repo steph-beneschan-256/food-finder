@@ -74,7 +74,10 @@ export default function InputBar({onLocationSelected, onOptionsUpdated, defaultO
             setLoadingDeviceLoc(false);
             const lat = pos.coords.latitude;
             const long = pos.coords.longitude;
-            onLocationSelected(lat, long); // Tell the parent component to conduct the search
+            if(mapManager.isInSanFrancisco(lat, long))
+                onLocationSelected(lat, long); // Tell the parent component to conduct the search
+            else
+                setErrorMsg("Sorry, but it looks like you're outside of San Francisco.");
         },
         (err) => {
             setErrorMsg("Sorry, we couldn't get your location.");

@@ -70,6 +70,15 @@ class MapManager {
     
     };
 
+    isInSanFrancisco(lat, long) {
+        return (
+            (37.6773 <= lat)
+            && (lat <= 37.9799)
+            && (-122.6986 <= long)
+            && (long <= -122.2174)
+        );
+    }
+
     /*
     This function should be called when the user clicks on the map,
     then clicks on the "Use this location" button that appears in
