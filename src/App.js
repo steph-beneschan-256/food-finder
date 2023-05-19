@@ -125,9 +125,14 @@ function App() {
   return (
     <div className="App">
       <header>
-        <h1>
-          Food Truck Finder
-        </h1>
+        <div>
+          <img src="toy-truck-horizontal.png" alt=""></img>
+          <h1>
+            Food Truck Finder
+          </h1>
+        </div>
+        
+
       </header>
 
       <div className="map-and-vendors-container">
