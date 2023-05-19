@@ -76,14 +76,23 @@ function App() {
   
                 const vendorLat = parseFloat(location.location.latitude);
                 const vendorLong = parseFloat(location.location.longitude);
-                const foodTypes = (location.fooditems ? location.fooditems.split(/:|&|; ?/) : []).map((foodType) => {
-                  return foodType.trim();
-                });
+
+                let foodTypes = [];
+                let foodTypesFormatted = [];
+
+
+                if(location.fooditems) {
+                  location.fooditems.split(/:|&|; ?/).forEach((foodType) => {
+                    const trimmed = foodType.trim();
+                    foodTypes.push(trimmed);
+                    foodTypesFormatted.push(trimmed.toLowerCase());
+                  });
+                }
                 console.log(foodTypes);
                 console.log(desiredFoodType);
                 
                 const c = distance(lat, long, vendorLat, vendorLong);
-                if(((desiredFoodType === "") || (foodTypes.includes(desiredFoodType))) && (c <= radius)) {
+                if(((desiredFoodType === "") || (foodTypesFormatted.includes(desiredFoodType.trim().toLowerCase()))) && (c <= radius)) {
                     
                     foodTypes.forEach((foodType) => 
                       {nearbyFoodTypes.add(foodType)}
