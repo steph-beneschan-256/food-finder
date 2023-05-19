@@ -128,7 +128,7 @@ function App() {
         <div>
           <img src="toy-truck-horizontal.png" alt=""></img>
           <h1>
-            Food Truck Finder
+            San Francisco Food Truck Finder
           </h1>
         </div>
         

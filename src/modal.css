@@ -1,0 +1,19 @@
+.modal-container {
+    position: absolute;
+    width: 100%;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    background-color: #00000088;
+    z-index: 9999;
+    transition: background-color 0.25s;
+}
+.modal-inner {
+    position: absolute;
+    width: 94%;
+    margin: 2%;
+    padding: 2%;
+    background-color: white;
+    border-radius: 2vw;
+    transition: background-color 0.5s;
+}

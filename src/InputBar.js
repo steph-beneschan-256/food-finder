@@ -1,5 +1,6 @@
 import { useState } from "react";
 import mapManager from "./MapManager";
+import ModalForm from "./ModalForm";
 
 const validLong = /^0*-?((180(\.0*)?)|(1[0-7]\d|\d\d?)(\.\d*)?)$/;
 const validLat = /^0*-?((90(\.0*)?)|([0-8]?\d(\.\d*)?))$/;
@@ -33,6 +34,8 @@ export default function InputBar({onLocationSelected, onOptionsUpdated, defaultO
     const [errorMsg, setErrorMsg] = useState("");
 
     const [loadingDeviceLoc, setLoadingDeviceLoc] = useState(false);
+
+    const [searchModalOpen, setSearchModalOpen] = useState(false);
 
     /*
     When the user clicks on the map at a certain location,
@@ -74,9 +77,18 @@ export default function InputBar({onLocationSelected, onOptionsUpdated, defaultO
             onLocationSelected(lat, long); // Tell the parent component to conduct the search
         },
         (err) => {
-            setErrorMsg("Sorry, we couldn't get your location. Please choose a location on the map instead.");
+            setErrorMsg("Sorry, we couldn't get your location.");
             setLoadingDeviceLoc(false);
         });
+    }
+
+    function openSearchModal() {
+        setSearchModalOpen(true);
+
+    }
+
+    function closeSearchModal() {
+        setSearchModalOpen(false);
     }
 
     function submitInput() {
@@ -97,15 +109,24 @@ export default function InputBar({onLocationSelected, onOptionsUpdated, defaultO
     return(
         <div className="input-pane">
 
+            {searchModalOpen && (
+                <ModalForm onSubmit={(lat, long) => onLocationSelected(lat, long)} onClose={closeSearchModal}/>
+            )}
                         
             <div>
                 <h3>
-                To search, please select a location on the map or use your device location:
+                To find food trucks near a particular location, please choose one of the input options below (you can also click on the map):
                 </h3>
+
+                <button onClick={openSearchModal} className="secondary-button">
+                    Enter Address
+                </button>
                 
                 <button onClick={requestUserLocation} disabled={loadingDeviceLoc} className="secondary-button">
-                    {loadingDeviceLoc ? "Getting your location..." : "Use my location"}
+                    {loadingDeviceLoc ? "Getting your location..." : "Get my location"}
                 </button>
+
+
 
                 {(errorMsg !== "") &&
                     <div className="error-msg">
