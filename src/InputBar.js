@@ -33,6 +33,8 @@ export default function InputBar({processInput}) {
 
     const [selectedUnits, setSelectedUnits] = useState("km");
 
+    const [loadingDeviceLoc, setLoadingDeviceLoc] = useState(false);
+
     /*
     When the user clicks on the map at a certain location,
     then clicks on the "use this location" button that consequently pops up,
@@ -65,12 +67,15 @@ export default function InputBar({processInput}) {
     }
 
     function requestUserLocation() {
+        setLoadingDeviceLoc(true);
         navigator.geolocation.getCurrentPosition((pos) => {
             setInputLat(pos.coords.latitude);
             setInputLong(pos.coords.longitude);
+            setLoadingDeviceLoc(false);
         },
         (err) => {
             console.log(err);
+            setLoadingDeviceLoc(false);
         });
     }
 
@@ -106,9 +111,11 @@ export default function InputBar({processInput}) {
                     <input value={inputLong} onChange={(e) => setInputLong(e.target.value)} placeholder="Longitude"/>
 
                 </label>
-                <button onClick={requestUserLocation}>
-                    Use my location
-                </button>
+                <div>
+                    <button onClick={requestUserLocation} disabled={loadingDeviceLoc} className="secondary-button">
+                        {loadingDeviceLoc ? "Getting your location..." : "Use my location"}
+                    </button>
+                </div>
             </div>
             <div className="divider"/>
             <div>

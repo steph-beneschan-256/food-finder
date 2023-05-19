@@ -78,8 +78,9 @@
   width: 90%;
   min-height: 50px;
   height: 2.5vw;
-  background-color: blue;
+  background-color: #e2630f;
   color: white;
+  font-size: 2vw;
   border: none;
   margin-left: 5%;
   margin-right: 5%;
@@ -90,7 +91,7 @@
 
 .submit-button:hover {
   cursor: pointer;
-  background-color: #7799ff;
+  background-color: #ec821e;
 }
 
 .input-latlng {
@@ -124,3 +125,25 @@
   margin-top: 4px;
   margin-bottom: 5px;
 }
+
+.popup-inner-div {
+  text-align: center;
+}
+
+.secondary-button {
+  background-color: #ffa947;
+  padding: 1vw;
+  color: black;
+  border: none;
+  border-radius: 5px;
+}
+.secondary-button:hover {
+  cursor: pointer;
+  background-color: #ffc219;
+}
+.secondary-button:disabled {
+  cursor: not-allowed;
+  background-color: #bdbdbd;
+  color: #808080
+}
+

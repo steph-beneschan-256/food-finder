@@ -69,10 +69,15 @@ class MapManager {
     
     };
 
-    popUpButtonClicked(e) {
-        this.updateSelectedLocMarker(this.selectedLat, this.selectedLong);
+    /*
+    This function should be called when the user clicks on the map,
+    then clicks on the "Use this location" button that appears in
+    the resulting popup
+    */
+    popUpButtonClicked(lat=this.selectedLat, long=this.selectedLong) {
+        this.updateSelectedLocMarker(lat, long);
         if(this.onSelectLocation !== null) {
-            this.onSelectLocation(this.selectedLat, this.selectedLong);
+            this.onSelectLocation(lat, long);
         }
     }
 
@@ -107,19 +112,45 @@ class MapManager {
 
 
             function onMapClick(e) {
+                
                 mapManager.setSelectedLat(e.latlng.lat);
                 mapManager.setSelectedLong(e.latlng.lng);
 
-                let popupButton = document.createElement("button");
-                popupButton.textContent = "Use this location";
-                popupButton.onclick = (e) => {
-                    mapManager.popUpButtonClicked(e);
+                // Create a div for within the popup
+                let popupDiv = document.createElement("div");
+                popupDiv.className = "popup-inner-div";
+
+                // Create a div within the popup that shows the clicked location
+                let latlngDiv = document.createElement("div");
+                latlngDiv.textContent = `(${e.latlng.lat.toFixed(4)}, ${e.latlng.lng.toFixed(2)})`;
+                popupDiv.appendChild(latlngDiv);
+
+                /*
+                Create a div within the popup that shows a "use this location" button
+                Clicking the button updates the InputBar component as if the user had
+                typed in the the clicked location's coordinates
+                */
+                let setLocButtonDiv = document.createElement("div");
+                let setLocButton = document.createElement("button");
+                setLocButton.textContent = "Use this location";
+                setLocButton.onclick = () => {
+                    mapManager.popUpButtonClicked(e.latlng.lat, e.latlng.lng);
                     popup.close();
                 }
+                setLocButton.className = "secondary-button";
+                setLocButtonDiv.appendChild(setLocButton);
+                popupDiv.appendChild(setLocButtonDiv);
+
+                // let gMapsButtonDiv = document.createElement("div");
+                // let gMapsButton = document.createElement("button");
+                // gMapsButton.textContent = "View on Google Maps";
+                // gMapsButton.onclick = (e) => {
+                //     window.open(`google.com/maps/@${e.latlng.lat},${e.latlng.lng},17z`, "_blank");
+                // }
+                // gMapsButtonDiv.appendChild(gMapsButton);
 
                 popup.setLatLng(e.latlng)
-                .setContent(popupButton)
-                //.setContent(e.latlng.toString())
+                .setContent(popupDiv)
                 .openOn(newMap);
             }
             newMap.on('click', onMapClick);
@@ -161,7 +192,7 @@ class MapManager {
 
     }
 
-    // NOTE: radius must be given in meters (m)
+    // NOTE: radius argument should be given in meters (m)
     updateRangeCircle(lat, long, radius) {
         if(this.rangeCircle !== null)
             this.rangeCircle.remove();
