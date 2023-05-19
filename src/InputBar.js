@@ -115,10 +115,11 @@ export default function InputBar({onLocationSelected, onOptionsUpdated, defaultO
             </div>
 
             <div className="options">
+                <div className="divider"/>
                 <h3>Options:</h3>
                 <div>
                     <label>
-                        Preferred Units of Distance:
+                        1. Preferred Units of Distance:
                         <div className="unit-select-options">
                         {
                             selectableUnits.map((unit) => {
@@ -139,12 +140,12 @@ export default function InputBar({onLocationSelected, onOptionsUpdated, defaultO
                         </div>
                     </label>
                 </div>
-                <div className="divider"/>
+                {/* <div className="divider"/> */}
 
                 <div>
                     <label className="input-search-radius">
                         <div>
-                            Find vendors within this distance:
+                            2. Find vendors within this distance:
                         </div>
                         <div>
                             <b>{radius}</b> {selectedUnits}
@@ -157,7 +158,7 @@ export default function InputBar({onLocationSelected, onOptionsUpdated, defaultO
                         
                     </label>
                 </div>
-                <div className="divider"/>
+                {/* <div className="divider"/> */}
             </div>
 
         </div>
