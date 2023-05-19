@@ -97,6 +97,23 @@ export default function InputBar({onLocationSelected, onOptionsUpdated, defaultO
     return(
         <div className="input-pane">
 
+                        
+            <div>
+                <h3>
+                To search, please select a location on the map or use your device location:
+                </h3>
+                
+                <button onClick={requestUserLocation} disabled={loadingDeviceLoc} className="secondary-button">
+                    {loadingDeviceLoc ? "Getting your location..." : "Use my location"}
+                </button>
+
+                {(errorMsg !== "") &&
+                    <div className="error-msg">
+                        &#x26A0; {errorMsg}
+                    </div>
+                }
+            </div>
+
             <div className="options">
                 <h3>Options:</h3>
                 <div>
@@ -141,22 +158,6 @@ export default function InputBar({onLocationSelected, onOptionsUpdated, defaultO
                     </label>
                 </div>
                 <div className="divider"/>
-            </div>
-            
-            <div>
-                <p>
-                To search, please select a location on the map or use your device location:
-                </p>
-                
-                <button onClick={requestUserLocation} disabled={loadingDeviceLoc} className="secondary-button">
-                    {loadingDeviceLoc ? "Getting your location..." : "Use my location"}
-                </button>
-
-                {(errorMsg !== "") &&
-                    <div className="error-msg">
-                        &#x26A0; {errorMsg}
-                    </div>
-                }
             </div>
 
         </div>
